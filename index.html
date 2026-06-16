@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Cascade &amp; Coal — Wood-fire steakhouse on Capitol Hill, Seattle. Nightly reservations via OpenTable.">
+  <title>Cascade &amp; Coal — Wood-Fire Steakhouse · Capitol Hill, Seattle</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ──────────────────────────────────────
+       DESIGN TOKENS
+    ────────────────────────────────────── */
+    :root {
+      /* Backgrounds */
+      --bg:        #0D0B09;
+      --bg-alt:    #111009;
+      /* Oxblood */
+      --oxblood-d: #4E1519;
+      /* Brass / copper (hover variant) */
+      --brass:     #C9922B;
+      --copper:    #B87333;
+      /* Cream */
+      --cream:     #F2E8D5;
+      --cream-d:   #BFB09A;
+      /* Slate */
+      --slate-l:   #6A677A;
+      --f-display: 'Cormorant Garamond', 'Times New Roman', serif;
+      --f-body:    'Barlow', system-ui, -apple-system, sans-serif;
+      --nav-h:     76px;
+    }
+
+    /* ──────────────────────────────────────
+       RESET
+    ────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--cream);
+      font-family: var(--f-body);
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    img { display: block; max-width: 100%; }
+    a { text-decoration: none; }
+    section { scroll-margin-top: var(--nav-h); }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      html { scroll-behavior: auto; }
+    }
+
+    /* ──────────────────────────────────────
+       NAV
+    ────────────────────────────────────── */
+    .nav {
+      position: fixed;
+      inset: 0 0 auto 0;
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(1.25rem, 5vw, 3.5rem);
+      z-index: 100;
+      transition: background 0.45s ease, backdrop-filter 0.45s ease, border-color 0.45s ease;
+      border-bottom: 1px solid transparent;
+    }
+    .nav.scrolled {
+      background: rgba(13, 11, 9, 0.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-color: rgba(201, 146, 43, 0.13);
+    }
+    .nav-brand {
+      font-family: var(--f-body);
+      font-size: 0.6875rem;
+      font-weight: 500;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--cream);
+      transition: color 0.2s;
+    }
+    .nav-brand:hover { color: var(--brass); }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2.25rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.625rem;
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--cream-d);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--cream); }
+    .nav-links a:not(.nav-cta) { position: relative; }
+    .nav-links a:not(.nav-cta)::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 50%; right: 50%;
+      height: 1px;
+      background: var(--brass);
+      transition: left 0.28s cubic-bezier(0.16,1,0.3,1), right 0.28s cubic-bezier(0.16,1,0.3,1);
+    }
+    .nav-links a:not(.nav-cta):hover::after { left: 0; right: 0; }
+    .nav-cta {
+      color: var(--brass) !important;
+      border: 1px solid rgba(201, 146, 43, 0.35) !important;
+      padding: 0.45rem 1.125rem;
+      font-weight: 500 !important;
+      transition: background 0.2s, color 0.2s, border-color 0.2s !important;
+    }
+    .nav-cta:hover {
+      background: var(--brass) !important;
+      color: var(--bg) !important;
+      border-color: var(--brass) !important;
+    }
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 20px;
+      height: 1px;
+      background: var(--cream);
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    @media (max-width: 720px) {
+      .nav-links { display: none; }
+      .nav-toggle { display: flex; }
+      .nav.open .nav-links {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        inset: var(--nav-h) 0 0;
+        background: rgba(13, 11, 9, 0.97);
+        backdrop-filter: blur(14px);
+        align-items: center;
+        justify-content: center;
+        gap: 2.25rem;
+        z-index: 90;
+      }
+      .nav.open .nav-links a { font-size: 0.75rem; letter-spacing: 0.22em; }
+      .nav.open .nav-toggle span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+      .nav.open .nav-toggle span:nth-child(2) { opacity: 0; }
+      .nav.open .nav-toggle span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+    }
+
+    /* ──────────────────────────────────────
+       HERO — SMOOTH-SCROLL VIDEO REVEAL
+    ────────────────────────────────────── */
+
+    /* Outer scroll driver: extra height gives scroll room for the reveal */
+    #hero {
+      position: relative;
+      /* JS sets --hero-scroll-h; fallback 1500px desktop, 900px mobile */
+      height: calc(var(--hero-scroll-h, 1500px) + 100svh);
+    }
+
+    /* Sticky viewport frame — stays pinned while user scrolls through #hero */
+    #hero-sticky {
+      position: sticky;
+      top: 0;
+      height: 100svh;
+      min-height: 600px;
+      overflow: hidden;
+      background: #090705;
+    }
+
+    /* ── Video background — clips and scales via JS ── */
+    #hero-clipped {
+      position: absolute;
+      inset: 0;
+      /* initial clip: 25% inset on all sides = center 50% rectangle */
+      clip-path: polygon(25% 25%, 75% 25%, 75% 75%, 25% 75%);
+      will-change: clip-path;
+    }
+
+    #hero-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      /* starts zoomed in; JS animates back to scale(1) */
+      transform: scale(1.7);
+      transform-origin: center center;
+      will-change: transform;
+    }
+
+    /* Dark scrim — heavy enough to keep text readable over bright video */
+    #hero-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        /* Full-screen base dimmer */
+        linear-gradient(to bottom,
+          rgba(0, 0, 0, 0.45) 0%,
+          rgba(0, 0, 0, 0.55) 40%,
+          rgba(0, 0, 0, 0.6)  60%,
+          rgba(0, 0, 0, 0.72) 100%),
+        /* Warm oxblood vignette at bottom */
+        radial-gradient(ellipse 80% 50% at 50% 100%,
+          rgba(78, 21, 25, 0.5) 0%, transparent 65%);
+      z-index: 1;
+    }
+
+    /* Ember particles on top of video */
+    #ember-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* ── Hero text content — NOT inside #hero-clipped so it's never masked ── */
+    #hero-content {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* opacity and transform now driven per child, not on the wrapper */
+    }
+
+    /* Each child starts invisible; JS animates individually with staggered
+       scroll windows and different parallax drift rates for depth layering */
+    .hero-eyebrow,
+    .wm-line1,
+    .wm-line2,
+    .hero-sub,
+    .hero-actions {
+      opacity: 0;
+      will-change: opacity, transform;
+    }
+
+    .hero-inner {
+      width: 100%;
+      padding: 0 clamp(1.25rem, 5vw, 3.5rem);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Thin gold vertical accent */
+    .hero-vline {
+      position: absolute;
+      top: 0;
+      right: clamp(1.25rem, 5vw, 3.5rem);
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom,
+        transparent 0%,
+        rgba(201, 146, 43, 0.22) 20%,
+        rgba(201, 146, 43, 0.22) 80%,
+        transparent 100%
+      );
+      z-index: 5;
+    }
+
+    /* Hero text — static positions; opacity driven by scroll JS on #hero-content */
+    .hero-eyebrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 28px;
+      height: 1px;
+      background: var(--brass);
+      flex-shrink: 0;
+    }
+
+    .hero-wordmark { }
+    .wm-line1 {
+      font-family: var(--f-display);
+      font-size: clamp(4rem, 11.5vw, 10.5rem);
+      font-weight: 600;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--cream);
+      line-height: 0.87;
+      display: block;
+      text-shadow: 0 2px 32px rgba(0,0,0,0.7), 0 0 80px rgba(0,0,0,0.4);
+    }
+    .wm-line2 {
+      font-family: var(--f-display);
+      font-size: clamp(1.5rem, 4.2vw, 3.75rem);
+      font-weight: 300;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: rgba(242, 232, 213, 0.55);
+      line-height: 1;
+      display: block;
+      margin-top: 0.38em;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.65);
+    }
+
+    .hero-sub { margin-top: 1.75rem; }
+    .hero-sub p {
+      font-size: clamp(0.8125rem, 1.5vw, 0.9375rem);
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      color: var(--cream);
+      text-shadow: 0 1px 12px rgba(0,0,0,0.8);
+    }
+
+    .hero-actions {
+      margin-top: 2.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 1.75rem;
+    }
+
+    /* Scroll hint at bottom */
+    .hero-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 11;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0.6;
+    }
+    .hero-hint span {
+      font-size: 0.5625rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--slate-l);
+    }
+    .scroll-tick {
+      width: 1px;
+      height: 42px;
+      background: linear-gradient(to bottom, var(--brass) 0%, transparent 100%);
+      animation: scrollPulse 2s ease-in-out infinite 2s;
+    }
+
+    /* ──────────────────────────────────────
+       BUTTONS
+    ────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: var(--f-body);
+      font-size: 0.625rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: none;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .btn-gold { background: var(--brass); color: var(--bg); padding: 0.9rem 2rem; }
+    .btn-gold:hover { background: var(--copper); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--cream-d);
+      padding: 0;
+      border-bottom: 1px solid rgba(191, 176, 154, 0.28);
+      padding-bottom: 2px;
+    }
+    .btn-ghost:hover { color: var(--cream); border-color: var(--brass); }
+    .btn-white { background: var(--cream); color: var(--oxblood-d); padding: 0.9rem 2.5rem; }
+    .btn-white:hover { background: var(--cream); }
+
+    .arr {
+      display: inline-block;
+      width: 20px;
+      height: 10px;
+      position: relative;
+      flex-shrink: 0;
+      transition: width 0.22s ease;
+    }
+    .arr::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 5px;
+      height: 1px;
+      background: currentColor;
+      transform: translateY(-50%);
+    }
+    .arr::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 50%;
+      width: 6px;
+      height: 6px;
+      border-right: 1px solid currentColor;
+      border-top: 1px solid currentColor;
+      transform: translateY(-50%) rotate(45deg);
+    }
+    .btn:hover .arr { width: 28px; }
+
+    /* ──────────────────────────────────────
+       LAYOUT UTILITIES
+    ────────────────────────────────────── */
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 clamp(1.25rem, 5vw, 3.5rem); }
+    .section-pad { padding: clamp(5rem, 11vh, 8.5rem) 0; }
+
+    .label {
+      font-family: var(--f-body);
+      font-size: 0.625rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--brass);
+    }
+    .h-display {
+      font-family: var(--f-display);
+      font-size: clamp(2.5rem, 5.5vw, 5rem);
+      font-weight: 400;
+      line-height: 1.05;
+    }
+    .h-section {
+      font-family: var(--f-display);
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 400;
+      line-height: 1.1;
+    }
+    .rule {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(201, 146, 43, 0.18), transparent);
+      transform: scaleX(0);
+      transition: transform 1.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .rule.in { transform: scaleX(1); }
+
+    /* Section-level label brass rule — echoes hero eyebrow visual language */
+    .menu-header .label,
+    .story-text .label {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .menu-header .label::before,
+    .story-text .label::before {
+      content: '';
+      display: block;
+      width: 22px;
+      height: 1px;
+      background: var(--brass);
+      flex-shrink: 0;
+    }
+
+    /* Scroll-reveal */
+    .r {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.75s cubic-bezier(0.16,1,0.3,1),
+                  transform 0.75s cubic-bezier(0.16,1,0.3,1);
+    }
+    .r.in { opacity: 1; transform: translateY(0); }
+    .r.d1 { transition-delay: 0.08s; }
+    .r.d2 { transition-delay: 0.16s; }
+    .r.d3 { transition-delay: 0.24s; }
+    .r.d4 { transition-delay: 0.32s; }
+    .r.d5 { transition-delay: 0.40s; }
+    .r.d6 { transition-delay: 0.48s; }
+
+    /* ──────────────────────────────────────
+       MENU
+    ────────────────────────────────────── */
+    .menu-section {
+      background:
+        radial-gradient(ellipse 55% 35% at 50% 100%, rgba(107, 30, 37, 0.14) 0%, transparent 60%),
+        radial-gradient(ellipse 35% 25% at 0% 0%, rgba(201, 146, 43, 0.06) 0%, transparent 55%),
+        var(--bg-alt);
+    }
+    .menu-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin-bottom: clamp(2.5rem, 5vh, 4rem);
+    }
+    .menu-header-note { font-size: 0.875rem; color: var(--cream-d); max-width: 28ch; text-align: right; line-height: 1.7; }
+    @media (max-width: 640px) { .menu-header-note { text-align: left; max-width: 100%; } }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid rgba(201, 146, 43, 0.12);
+      border-left: 1px solid rgba(201, 146, 43, 0.12);
+    }
+    @media (max-width: 1024px) { .menu-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 580px)  { .menu-grid { grid-template-columns: 1fr; } }
+
+    .menu-card {
+      position: relative;
+      border-right: 1px solid rgba(201, 146, 43, 0.12);
+      border-bottom: 1px solid rgba(201, 146, 43, 0.12);
+      padding: clamp(1.5rem, 3.5vw, 2.5rem);
+      background: var(--bg-alt);
+      transition: background 0.35s;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+    }
+    .menu-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 1px;
+      background: linear-gradient(90deg, var(--brass) 0%, var(--copper) 100%);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .menu-card:hover { background: #181511; }
+    .menu-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 65% 55% at 100% 100%, rgba(201, 146, 43, 0.06) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.45s ease;
+      pointer-events: none;
+    }
+    .menu-card:hover::before { transform: scaleX(1); }
+    .menu-card:hover::after  { opacity: 1; }
+    .menu-card:hover .menu-num { opacity: 0.85; color: var(--copper); }
+    .menu-num { font-family: var(--f-display); font-style: italic; font-size: 0.75rem; color: var(--brass); opacity: 0.72; margin-bottom: 1.25rem; transition: opacity 0.3s, color 0.3s; }
+    .menu-name { font-family: var(--f-display); font-size: clamp(1.35rem, 2.5vw, 1.875rem); font-weight: 400; line-height: 1.2; color: var(--cream); margin-bottom: 0.875rem; }
+    .menu-desc { font-size: 0.8125rem; line-height: 1.7; color: var(--cream-d); flex: 1; margin-bottom: 1.5rem; }
+    .menu-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
+    .menu-price { font-family: var(--f-display); font-style: italic; font-size: 1.125rem; color: var(--brass); }
+    .menu-tag { font-size: 0.625rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--slate-l); border: 1px solid rgba(106, 103, 122, 0.3); padding: 0.3rem 0.65rem; }
+
+    /* ──────────────────────────────────────
+       STORY
+    ────────────────────────────────────── */
+    .story-section {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 45% 55% at 90% 50%, rgba(201, 146, 43, 0.04) 0%, transparent 55%),
+        var(--bg);
+    }
+    .story-section .container { position: relative; z-index: 1; }
+    #story-fire-canvas {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      pointer-events: none; z-index: 0;
+    }
+    .story-grid { display: grid; grid-template-columns: 5fr 6fr; gap: clamp(2.5rem, 7vw, 7rem); align-items: center; }
+    @media (max-width: 800px) { .story-grid { grid-template-columns: 1fr; } }
+
+    .story-visual { position: relative; aspect-ratio: 3/4; overflow: hidden; }
+    .sv-fill {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 75% 55% at 50% 85%, rgba(107, 30, 37, 0.65) 0%, transparent 58%),
+        radial-gradient(ellipse 50% 40% at 22% 52%, rgba(184, 115, 51, 0.22) 0%, transparent 50%),
+        linear-gradient(155deg, #1C1410 0%, #0D0B09 50%, #160E0B 100%);
+      animation: svGlow 7s ease-in-out infinite;
+    }
+    .sv-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(184, 115, 51, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(184, 115, 51, 0.045) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+    .sv-border { position: absolute; inset: 0; border: 1px solid rgba(201, 146, 43, 0.13); }
+    .sv-quote {
+      position: absolute; bottom: 0; left: 0; right: 0; padding: 2rem;
+      background: linear-gradient(to top, rgba(9, 7, 5, 0.9) 0%, transparent 100%);
+    }
+    .sv-quote blockquote { font-family: var(--f-display); font-size: clamp(1.05rem, 2vw, 1.35rem); font-style: italic; font-weight: 300; line-height: 1.45; color: var(--cream); opacity: 0.88; }
+
+    .story-text .label { margin-bottom: 1.25rem; display: block; }
+    .story-text p { font-size: clamp(0.9rem, 1.4vw, 1rem); line-height: 1.85; color: var(--cream-d); margin-bottom: 1.2rem; }
+
+    .story-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2.75rem; padding-top: 2.25rem; border-top: 1px solid rgba(201, 146, 43, 0.12); }
+    .stat-val { font-family: var(--f-display); font-size: clamp(1.75rem, 3.5vw, 2.5rem); color: var(--brass); line-height: 1; font-weight: 400; }
+    .stat-key { font-size: 0.625rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--slate-l); margin-top: 0.4rem; }
+
+    /* ──────────────────────────────────────
+       RESERVE
+    ────────────────────────────────────── */
+    .reserve-section { position: relative; background: var(--oxblood-d); overflow: hidden; }
+    .reserve-section::before {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 90% at 0% 50%, rgba(0,0,0,0.38) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 80% at 100% 50%, rgba(107, 30, 37, 0.5) 0%, transparent 55%);
+    }
+    .reserve-section::after {
+      content: ''; position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+      background-size: 200px; opacity: 0.5;
+    }
+    #reserve-fire-canvas {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      pointer-events: none; z-index: 1;
+    }
+    .reserve-inner { position: relative; z-index: 2; text-align: center; max-width: 580px; margin: 0 auto; }
+    .reserve-inner::before {
+      content: '&';
+      position: absolute;
+      font-family: var(--f-display);
+      font-size: clamp(14rem, 32vw, 22rem);
+      font-weight: 300;
+      font-style: italic;
+      color: rgba(201, 146, 43, 0.06);
+      line-height: 1;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      user-select: none;
+      z-index: -1;
+    }
+    .reserve-inner .label { color: rgba(201, 146, 43, 0.65); display: block; margin-bottom: 1.25rem; }
+    .reserve-inner .h-display { color: var(--cream); }
+    .reserve-inner p { font-size: clamp(0.875rem, 1.5vw, 1rem); color: rgba(242, 232, 213, 0.62); line-height: 1.75; margin: 1.25rem 0 2.25rem; }
+
+    /* ──────────────────────────────────────
+       LOCATION
+    ────────────────────────────────────── */
+    .location-section {
+      background:
+        radial-gradient(ellipse 45% 35% at 100% 0%, rgba(201, 146, 43, 0.055) 0%, transparent 55%),
+        radial-gradient(ellipse 35% 30% at 0% 100%, rgba(107, 30, 37, 0.1) 0%, transparent 50%),
+        var(--bg-alt);
+    }
+    .location-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2.5rem, 8vw, 7rem); }
+    @media (max-width: 720px) { .location-grid { grid-template-columns: 1fr; } }
+
+    .loc-item {
+      margin-bottom: 2rem;
+      border-left: 1px solid transparent;
+      padding-left: 0;
+      transition: border-color 0.35s, padding-left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .loc-item:hover {
+      border-left-color: rgba(201, 146, 43, 0.28);
+      padding-left: 0.875rem;
+    }
+    .loc-item:last-child { margin-bottom: 0; }
+    .loc-label { font-size: 0.625rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--brass); margin-bottom: 0.5rem; }
+    .loc-val { font-size: 0.9375rem; color: var(--cream-d); line-height: 1.65; }
+    .loc-val a { color: var(--cream-d); transition: color 0.2s; }
+    .loc-val a:hover { color: var(--cream); }
+
+    .hours-tbl { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    .hours-tbl td { padding: 0.875rem 0; font-size: 0.875rem; color: var(--cream-d); }
+    .hours-tbl td:first-child { color: var(--cream); font-weight: 400; width: 42%; }
+    .hours-tbl tr + tr td { border-top: 1px solid rgba(201, 146, 43, 0.08); }
+    .hours-tbl td { transition: color 0.2s; }
+    .hours-tbl tr:hover td { color: var(--cream); }
+    .hours-note { margin-top: 1.75rem; font-size: 0.8rem; color: var(--slate-l); line-height: 1.65; }
+
+    /* ──────────────────────────────────────
+       FOOTER
+    ────────────────────────────────────── */
+    .footer { background: var(--bg); border-top: 1px solid rgba(201, 146, 43, 0.1); padding: 2.5rem 0; }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .footer-brand { font-size: 0.625rem; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--cream-d); }
+    .footer-copy { font-size: 0.625rem; letter-spacing: 0.05em; color: var(--slate-l); }
+
+    /* ──────────────────────────────────────
+       MOBILE — designed, not shrunk
+    ────────────────────────────────────── */
+
+    /* Story visual: 3/4 portrait becomes ~450px tall in a 1-col layout — cap it */
+    @media (max-width: 800px) {
+      .story-visual { max-height: 340px; }
+    }
+
+    @media (max-width: 640px) {
+      /* Type: bump h-section minimum from 2rem to 2.25rem */
+      .h-section { font-size: clamp(2.25rem, 7.5vw, 3.5rem); }
+
+      /* Hero: desktop editorial accent line, remove on narrow screens */
+      .hero-vline { display: none; }
+
+      /* Hero: stack CTAs, gold button full-width with centered label */
+      .hero-actions {
+        flex-direction: column;
+        align-items: center;
+        gap: 1.25rem;
+        width: 100%;
+      }
+      .hero-actions .btn-gold {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+      }
+      .hero-sub { margin-top: 1.25rem; }
+
+      /* Story stats: center under the single-column text block */
+      .story-stats { text-align: center; }
+
+      /* Reserve: ghost '&' minimum is 14rem (224px) — scale down for small screens */
+      .reserve-inner::before { font-size: clamp(7rem, 38vw, 12rem); }
+
+      /* Footer: center-stack brand + copyright */
+      .footer-inner {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 0.5rem;
+      }
+    }
+
+    /* ──────────────────────────────────────
+       KEYFRAMES
+    ────────────────────────────────────── */
+    @keyframes fadeUp  { to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn  { to { opacity: 1; } }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 1; transform: scaleY(1); transform-origin: top; }
+      50%       { opacity: 0.35; transform: scaleY(0.55); transform-origin: top; }
+    }
+    @keyframes svGlow {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.68; }
+    }
+
+    /* ──────────────────────────────────────
+       CUSTOM CURSOR (desktop pointer only)
+    ────────────────────────────────────── */
+    @media (hover: hover) and (pointer: fine) {
+      * { cursor: none !important; }
+    }
+    #cursor-dot {
+      position: fixed;
+      top: 0; left: 0;
+      width: 7px; height: 7px;
+      background: var(--brass);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      will-change: transform;
+      transition: width 0.22s ease, height 0.22s ease, background-color 0.22s ease, opacity 0.2s;
+    }
+    #cursor-ring {
+      position: fixed;
+      top: 0; left: 0;
+      width: 34px; height: 34px;
+      border: 1px solid rgba(201, 146, 43, 0.38);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      will-change: transform;
+      transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease, opacity 0.25s;
+    }
+    #cursor-dot.active  { width: 11px; height: 11px; background-color: var(--copper); }
+    #cursor-ring.active { width: 50px; height: 50px; border-color: rgba(201, 146, 43, 0.16); }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── NAV ────────────────────────────── -->
+  <nav class="nav" id="nav" aria-label="Main navigation">
+    <a href="#" class="nav-brand">Cascade &amp; Coal</a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#story">Our Story</a></li>
+      <li><a href="#location">Location</a></li>
+      <li>
+        <a href="https://www.opentable.com/" target="_blank" rel="noopener noreferrer" class="nav-cta">Reserve</a>
+      </li>
+    </ul>
+    <button class="nav-toggle" id="nav-toggle"
+            aria-label="Toggle navigation menu"
+            aria-expanded="false"
+            aria-controls="nav-links">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- ── HERO — scroll-reveal video ──────── -->
+  <!--
+    Structure:
+    #hero            — tall scroll driver (JS sets CSS var --hero-scroll-h)
+      #hero-sticky   — position:sticky; stays pinned to top while user scrolls
+        #hero-clipped  — clip-path animates from center box → full screen
+          #hero-video  — steak_video.mp4, zooms out as clip expands
+          #hero-overlay  — cinematic dark gradient for text contrast
+          #ember-canvas  — floating ember particles
+        .hero-vline  — gold accent line (outside clip, always visible)
+        #hero-content  — wordmark + CTAs (outside clip, never masked)
+        .hero-hint   — scroll indicator
+  -->
+  <section id="hero" aria-label="Cascade and Coal welcome">
+    <div id="hero-sticky">
+
+      <!-- Clipped video background -->
+      <div id="hero-clipped" aria-hidden="true">
+        <video id="hero-video" autoplay muted loop playsinline preload="auto"
+               aria-hidden="true">
+          <source src="steak_video.mp4" type="video/mp4">
+        </video>
+        <div id="hero-overlay"></div>
+        <canvas id="ember-canvas" aria-hidden="true"></canvas>
+      </div>
+
+      <!-- Gold vertical accent — sits outside clip so always sharp -->
+      <div class="hero-vline" aria-hidden="true"></div>
+
+      <!-- Text content — outside #hero-clipped so never masked by clip-path -->
+      <div id="hero-content">
+        <div class="hero-inner">
+          <div class="hero-eyebrow">
+            <span class="label">Est. Capitol Hill · Seattle, WA</span>
+          </div>
+          <div class="hero-wordmark" aria-label="Cascade and Coal">
+            <span class="wm-line1">Cascade</span>
+            <span class="wm-line2">&amp;&nbsp;Coal</span>
+          </div>
+          <div class="hero-sub">
+            <p>Wood-fire steakhouse &nbsp;·&nbsp; Capitol Hill</p>
+          </div>
+          <div class="hero-actions">
+            <a href="https://www.opentable.com/" target="_blank" rel="noopener noreferrer" class="btn btn-gold">
+              Reserve a Table
+              <span class="arr" aria-hidden="true"></span>
+            </a>
+            <a href="#menu" class="btn btn-ghost">
+              View Menu
+              <span class="arr" aria-hidden="true"></span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scroll hint -->
+      <div class="hero-hint" aria-hidden="true">
+        <div class="scroll-tick"></div>
+        <span>Scroll</span>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="rule" aria-hidden="true"></div>
+
+  <!-- ── MENU ───────────────────────────── -->
+  <section class="menu-section section-pad" id="menu" aria-label="Featured menu">
+    <div class="container">
+      <div class="menu-header">
+        <div>
+          <p class="label r">The Cut</p>
+          <h2 class="h-display r d1" style="margin-top: 0.6rem;">Six Signatures</h2>
+        </div>
+        <p class="menu-header-note r d2">
+          Sourced from Pacific Northwest ranches &amp; premier importers.
+          Wood-fired over alderwood &amp; charcoal.
+        </p>
+      </div>
+
+      <div class="menu-grid" role="list">
+        <article class="menu-card r d1" role="listitem">
+          <div class="menu-num">01</div>
+          <h3 class="menu-name">Prime Bone-In Ribeye</h3>
+          <p class="menu-desc">22 oz. USDA Prime, dry-aged 21 days. Seared in a 1,200°F broiler, finished with rosemary tallow and hand-harvested fleur de sel.</p>
+          <div class="menu-footer"><span class="menu-price">$62</span><span class="menu-tag">Signature</span></div>
+        </article>
+        <article class="menu-card r d2" role="listitem">
+          <div class="menu-num">02</div>
+          <h3 class="menu-name">A5 Wagyu Striploin</h3>
+          <p class="menu-desc">Miyazaki-gyu A5, 6 oz., tableside presentation. Served with house-pickled daikon, yuzu kosho, and Maldon flake.</p>
+          <div class="menu-footer"><span class="menu-price">$145</span><span class="menu-tag">Wagyu</span></div>
+        </article>
+        <article class="menu-card r d3" role="listitem">
+          <div class="menu-num">03</div>
+          <h3 class="menu-name">48-Day Porterhouse</h3>
+          <p class="menu-desc">44 oz. dry-aged in-house. Strip and tenderloin at the bone. Served for two with cultured butter and volcanic black salt.</p>
+          <div class="menu-footer"><span class="menu-price">$195</span><span class="menu-tag">For Two</span></div>
+        </article>
+        <article class="menu-card r d4" role="listitem">
+          <div class="menu-num">04</div>
+          <h3 class="menu-name">Pacific King Crab</h3>
+          <p class="menu-desc">Alaskan king crab, whole cluster, steamed to order. Brown butter, Meyer lemon, fresh tarragon.</p>
+          <div class="menu-footer"><span class="menu-price">$88</span><span class="menu-tag">Seafood</span></div>
+        </article>
+        <article class="menu-card r d5" role="listitem">
+          <div class="menu-num">05</div>
+          <h3 class="menu-name">Roasted Bone Marrow</h3>
+          <p class="menu-desc">Four halved femur bones, herb-caper gremolata, shallot vinaigrette. Grilled house sourdough. A prelude to fire.</p>
+          <div class="menu-footer"><span class="menu-price">$22</span><span class="menu-tag">Share</span></div>
+        </article>
+        <article class="menu-card r d6" role="listitem">
+          <div class="menu-num">06</div>
+          <h3 class="menu-name">Cascade Chocolate Torte</h3>
+          <p class="menu-desc">Valrhona 72% dark chocolate. Smoked sea salt caramel, Tahitian vanilla crème, candied hazelnut.</p>
+          <div class="menu-footer"><span class="menu-price">$18</span><span class="menu-tag">Dessert</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <div class="rule" aria-hidden="true"></div>
+
+  <!-- ── STORY ──────────────────────────── -->
+  <section class="story-section section-pad" id="story" aria-label="Our story">
+    <canvas id="story-fire-canvas" aria-hidden="true"></canvas>
+    <div class="container">
+      <div class="story-grid">
+        <div class="story-visual r" aria-hidden="true">
+          <div class="sv-fill"></div>
+          <div class="sv-grid"></div>
+          <div class="sv-border"></div>
+          <div class="sv-quote">
+            <blockquote>"Coal is patience. Fire is intention. The cut is everything."</blockquote>
+          </div>
+        </div>
+        <div class="story-text">
+          <span class="label r">Our Story</span>
+          <h2 class="h-section r d1" style="margin-top: 0.75rem; margin-bottom: 2rem;">
+            Coal, Craft,<br>
+            <em style="font-style: italic; color: var(--brass);">and the Cascades.</em>
+          </h2>
+          <p class="r d2">Cascade &amp; Coal was built from a conviction: that fire—managed with care, fueled with intention—transforms a great cut of beef into something altogether different. We opened on Capitol Hill to bring that conviction to Seattle's table.</p>
+          <p class="r d3">Every protein is sourced within a day's drive of the city, or through relationships built over years with the world's few truly exceptional Wagyu importers. Nothing arrives frozen. Nothing leaves underwhelming.</p>
+          <p class="r d4">The room is quiet by design. The service is present, not performative. Your table is yours for the evening.</p>
+          <div class="story-stats">
+            <div class="r d2"><div class="stat-val">700°</div><div class="stat-key">Open Fire</div></div>
+            <div class="r d3"><div class="stat-val">2019</div><div class="stat-key">Founded</div></div>
+            <div class="r d4"><div class="stat-val">100%</div><div class="stat-key">PNW Beef</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="rule" aria-hidden="true"></div>
+
+  <!-- ── RESERVE ────────────────────────── -->
+  <section class="reserve-section section-pad" id="reserve" aria-label="Make a reservation">
+    <canvas id="reserve-fire-canvas" aria-hidden="true"></canvas>
+    <div class="container">
+      <div class="reserve-inner">
+        <span class="label r">Reservations</span>
+        <h2 class="h-display r d1" style="margin-top: 0.75rem;">
+          A table<br><em style="font-style: italic;">is waiting.</em>
+        </h2>
+        <p class="r d2">We take reservations nightly for parties of one to twelve. For private dining, buyouts, or events above fourteen guests, contact us directly.</p>
+        <div class="r d3">
+          <a href="https://www.opentable.com/" target="_blank" rel="noopener noreferrer" class="btn btn-white">
+            Reserve on OpenTable
+            <span class="arr" aria-hidden="true"></span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── LOCATION ───────────────────────── -->
+  <section class="location-section section-pad" id="location" aria-label="Location and hours">
+    <div class="container">
+      <span class="label r" style="display: block; margin-bottom: 0.75rem;">Find Us</span>
+      <h2 class="h-section r d1" style="margin-bottom: clamp(2.5rem, 5vh, 4rem);">Capitol Hill,<br>Seattle.</h2>
+      <div class="location-grid">
+        <div>
+          <div class="loc-item r d1"><div class="loc-label">Neighborhood</div><div class="loc-val">Capitol Hill, Seattle, WA</div></div>
+          <div class="loc-item r d2"><div class="loc-label">Reservations</div><div class="loc-val"><a href="https://www.opentable.com/" target="_blank" rel="noopener noreferrer">OpenTable</a></div></div>
+          <div class="loc-item r d3"><div class="loc-label">Phone</div><div class="loc-val"><a href="tel:+12065550192">(206) 555-0192</a></div></div>
+          <div class="loc-item r d4"><div class="loc-label">Email</div><div class="loc-val"><a href="mailto:hello@cascadeandcoal.com">hello@cascadeandcoal.com</a></div></div>
+          <div class="loc-item r d5"><div class="loc-label">Private Events</div><div class="loc-val"><a href="mailto:events@cascadeandcoal.com">events@cascadeandcoal.com</a></div></div>
+        </div>
+        <div class="r d2">
+          <div class="loc-label" style="margin-bottom: 0.5rem;">Hours</div>
+          <table class="hours-tbl" aria-label="Restaurant hours">
+            <tbody>
+              <tr><td>Monday – Thursday</td><td>5:00 pm – 10:00 pm</td></tr>
+              <tr><td>Friday – Saturday</td><td>5:00 pm – 11:00 pm</td></tr>
+              <tr><td>Sunday</td><td>4:00 pm – 9:00 pm</td></tr>
+              <tr><td>Bar &amp; Lounge</td><td>Opens 30 min prior</td></tr>
+            </tbody>
+          </table>
+          <p class="hours-note">Walk-ins welcome at the bar. Dining room by reservation only. Kitchen closes 30 minutes before close.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ─────────────────────────── -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-brand">Cascade &amp; Coal</span>
+        <span class="footer-copy">&copy; 2025 Cascade &amp; Coal &nbsp;·&nbsp; Capitol Hill, Seattle, WA</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ── SCRIPTS ────────────────────────── -->
+  <script>
+    /* ── NAV ── */
+    const nav     = document.getElementById('nav');
+    const toggle  = document.getElementById('nav-toggle');
+    const navList = document.getElementById('nav-links');
+
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    toggle.addEventListener('click', () => {
+      const open = nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open);
+    });
+    navList.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        nav.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    /* ── SCROLL REVEAL ── */
+    const revealObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('in'); revealObs.unobserve(e.target); }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -36px 0px' });
+    document.querySelectorAll('.r').forEach(el => revealObs.observe(el));
+    document.querySelectorAll('.rule').forEach(el => revealObs.observe(el));
+
+    /* ── VIDEO HERO: clip-path + staggered parallax reveal per element ── */
+    (function initVideoHero() {
+      const heroSection = document.getElementById('hero');
+      const clipped     = document.getElementById('hero-clipped');
+      const video       = document.getElementById('hero-video');
+      if (!heroSection || !clipped || !video) return;
+
+      const SCROLL_H = window.innerWidth < 768 ? 900 : 1500;
+      heroSection.style.height = `calc(${SCROLL_H}px + 100svh)`;
+
+      /*
+        Each layer defines:
+          start / end  — fraction of SCROLL_H when the element fades in
+          drift        — total px the element travels from p=0→1 (negative = up)
+                         Higher magnitude = closer to viewer (foreground moves most)
+          slide        — initial downward offset that resets to 0 as the item reveals
+
+        Depth order (back → front):
+          CASCADE (heaviest type, closest to video plane)  →  least drift
+          & COAL                                           →  medium drift
+          eyebrow label & tagline (light UI chrome)        →  more drift
+          CTA buttons (true foreground)                    →  most drift
+      */
+      const layers = [
+        { sel: '.hero-eyebrow', start: 0.10, end: 0.28, drift: -72, slide: 20 },
+        { sel: '.wm-line1',     start: 0.22, end: 0.42, drift: -28, slide: 32 },
+        { sel: '.wm-line2',     start: 0.33, end: 0.52, drift: -40, slide: 26 },
+        { sel: '.hero-sub',     start: 0.44, end: 0.60, drift: -60, slide: 20 },
+        { sel: '.hero-actions', start: 0.54, end: 0.70, drift: -52, slide: 16 },
+      ].map(d => ({ ...d, el: document.querySelector(d.sel) }));
+
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (reduceMotion) {
+        clipped.style.clipPath = 'none';
+        layers.forEach(({ el }) => {
+          if (el) { el.style.opacity = '1'; el.style.transform = 'none'; }
+        });
+        return;
+      }
+
+      function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+
+      function update() {
+        const p = Math.max(0, Math.min(window.scrollY / SCROLL_H, 1));
+
+        /* ── Background: clip-path opens + video zooms out ── */
+        const s = 25 * (1 - p), e = 75 + 25 * p;
+        clipped.style.clipPath =
+          `polygon(${s}% ${s}%, ${e}% ${s}%, ${e}% ${e}%, ${s}% ${e}%)`;
+        video.style.transform = `scale(${1.7 - 0.7 * p})`;
+
+        /* ── Foreground: each element has its own scroll window + drift ── */
+        layers.forEach(({ el, start, end, drift, slide }) => {
+          if (!el) return;
+          const raw   = Math.max(0, Math.min((p - start) / (end - start), 1));
+          const eased = easeOut(raw);
+          el.style.opacity = eased;
+          /* slide-in offset collapses to 0 as eased→1;
+             drift keeps accumulating the entire time for parallax depth */
+          el.style.transform = `translateY(${(1 - eased) * slide + p * drift}px)`;
+        });
+      }
+
+      window.addEventListener('scroll', update, { passive: true });
+      update();
+    })();
+
+    /* ── EMBER CANVAS ── */
+    (function initEmbers() {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      const canvas = document.getElementById('ember-canvas');
+      if (!canvas) return;
+
+      const ctx = canvas.getContext('2d');
+      let W = 0, H = 0, embers = [], raf = null, active = true;
+
+      const count = () => window.innerWidth < 768 ? 20 : 45;
+
+      function resize() {
+        W = canvas.width  = canvas.offsetWidth;
+        H = canvas.height = canvas.offsetHeight;
+      }
+
+      function mk() {
+        return {
+          x: Math.random() * W, y: H + 10,
+          r: 0.5 + Math.random() * 1.1,
+          vy: 0.22 + Math.random() * 0.6,
+          vx: (Math.random() - 0.5) * 0.18,
+          phase: Math.random() * Math.PI * 2,
+          wFreq: 0.007 + Math.random() * 0.016,
+          wAmp:  0.22  + Math.random() * 0.45,
+          op: 0, peak: 0.18 + Math.random() * 0.42,
+          life: 0, maxL: 170 + Math.random() * 230,
+        };
+      }
+
+      function tick() {
+        if (!active) return;
+        ctx.clearRect(0, 0, W, H);
+        embers.forEach((e, i) => {
+          e.life++; e.phase += e.wFreq;
+          e.y -= e.vy;
+          e.x += Math.sin(e.phase) * e.wAmp + e.vx;
+          const t = e.life / e.maxL;
+          if      (t < 0.12) e.op = (t / 0.12) * e.peak;
+          else if (t > 0.65) e.op = ((1 - t) / 0.35) * e.peak;
+          else               e.op = e.peak;
+          const g = ctx.createRadialGradient(e.x, e.y, 0, e.x, e.y, e.r * 4.5);
+          g.addColorStop(0,   `rgba(220,160,58,${e.op})`);
+          g.addColorStop(0.4, `rgba(184,115,51,${e.op * 0.5})`);
+          g.addColorStop(1,   'rgba(107,30,37,0)');
+          ctx.beginPath(); ctx.arc(e.x, e.y, e.r * 4.5, 0, Math.PI * 2);
+          ctx.fillStyle = g; ctx.fill();
+          ctx.beginPath(); ctx.arc(e.x, e.y, e.r * 0.55, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255,225,140,${Math.min(e.op * 1.25, 1)})`; ctx.fill();
+          if (e.life >= e.maxL || e.y < -10) embers[i] = mk();
+        });
+        raf = requestAnimationFrame(tick);
+      }
+
+      function boot() {
+        resize();
+        const n = count();
+        embers = Array.from({ length: n }, () => {
+          const e = mk();
+          e.y    = Math.random() * H;
+          e.life = Math.floor(Math.random() * e.maxL * 0.55);
+          return e;
+        });
+        if (!raf) tick();
+      }
+
+      /* Pause when hero sticky is off-screen */
+      const heroSticky = document.getElementById('hero-sticky');
+      if (heroSticky) {
+        new IntersectionObserver(entries => {
+          active = entries[0].isIntersecting;
+          if (active && !raf) tick();
+          if (!active && raf) { cancelAnimationFrame(raf); raf = null; }
+        }, { threshold: 0 }).observe(heroSticky);
+      }
+
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) { active = false; if (raf) { cancelAnimationFrame(raf); raf = null; } }
+        else { active = true; tick(); }
+      });
+
+      let rTimer;
+      window.addEventListener('resize', () => {
+        clearTimeout(rTimer);
+        rTimer = setTimeout(() => {
+          resize();
+          const n = count();
+          while (embers.length > n) embers.pop();
+          while (embers.length < n) embers.push(mk());
+        }, 160);
+      }, { passive: true });
+
+      boot();
+    })();
+
+    /* ── CUSTOM CURSOR ── */
+    (function initCursor() {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+      const dot  = document.createElement('div');
+      const ring = document.createElement('div');
+      dot.id  = 'cursor-dot';
+      ring.id = 'cursor-ring';
+      document.body.appendChild(dot);
+      document.body.appendChild(ring);
+
+      let mx = -200, my = -200, rx = -200, ry = -200;
+
+      document.addEventListener('mousemove', e => {
+        mx = e.clientX; my = e.clientY;
+        dot.style.transform = `translate(${mx}px,${my}px) translate(-50%,-50%)`;
+      });
+
+      (function loop() {
+        rx += (mx - rx) * 0.11;
+        ry += (my - ry) * 0.11;
+        ring.style.transform = `translate(${rx}px,${ry}px) translate(-50%,-50%)`;
+        requestAnimationFrame(loop);
+      })();
+
+      document.querySelectorAll('a, button, [role="button"], .menu-card').forEach(el => {
+        el.addEventListener('mouseenter', () => { dot.classList.add('active'); ring.classList.add('active'); });
+        el.addEventListener('mouseleave', () => { dot.classList.remove('active'); ring.classList.remove('active'); });
+      });
+    })();
+
+    /* ── STORY FIRE CANVAS ── */
+    (function initStoryFire() {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const canvas = document.getElementById('story-fire-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const section = document.getElementById('story');
+
+      let W = 0, H = 0;
+      let mouseX = 0.5, mouseY = 0.5;
+      let smX = 0.5, smY = 0.5;
+
+      // Heat orbs: bottom-heavy oxblood mass + brass glow rising upward
+      const orbs = [
+        { nx: 0.12, ny: 0.90, size: 0.48, r: 107, g: 30,  b: 37,  alpha: 0.52, depth: 0.035, spd: 0.38, ph: 0.0 },
+        { nx: 0.72, ny: 0.94, size: 0.52, r: 107, g: 30,  b: 37,  alpha: 0.44, depth: 0.022, spd: 0.27, ph: 1.3 },
+        { nx: 0.44, ny: 0.72, size: 0.36, r: 201, g: 146, b: 43,  alpha: 0.15, depth: 0.055, spd: 0.45, ph: 2.6 },
+        { nx: 0.88, ny: 0.62, size: 0.28, r: 184, g: 115, b: 51,  alpha: 0.12, depth: 0.030, spd: 0.60, ph: 0.9 },
+        { nx: 0.22, ny: 0.52, size: 0.22, r: 201, g: 146, b: 43,  alpha: 0.10, depth: 0.048, spd: 0.33, ph: 3.9 },
+        { nx: 0.58, ny: 0.36, size: 0.17, r: 107, g: 30,  b: 37,  alpha: 0.17, depth: 0.018, spd: 0.51, ph: 1.8 },
+      ];
+
+      function resize() {
+        W = canvas.width  = section.offsetWidth;
+        H = canvas.height = section.offsetHeight;
+      }
+
+      function tick(ts) {
+        const t = ts * 0.001;
+        smX += (mouseX - smX) * 0.035;
+        smY += (mouseY - smY) * 0.035;
+
+        ctx.clearRect(0, 0, W, H);
+
+        orbs.forEach(o => {
+          const dx = Math.sin(t * o.spd       + o.ph)       * 65;
+          const dy = Math.cos(t * o.spd * 0.7 + o.ph + 1.1) * 42;
+          const px = (smX - 0.5) * o.depth * W;
+          const py = (smY - 0.5) * o.depth * H;
+
+          const cx  = o.nx * W + dx + px;
+          const cy  = o.ny * H + dy + py;
+          const rad = o.size * Math.min(W, H);
+
+          const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, rad);
+          g.addColorStop(0,    `rgba(${o.r},${o.g},${o.b},${o.alpha})`);
+          g.addColorStop(0.45, `rgba(${o.r},${o.g},${o.b},${o.alpha * 0.5})`);
+          g.addColorStop(1,    `rgba(${o.r},${o.g},${o.b},0)`);
+
+          ctx.beginPath();
+          ctx.arc(cx, cy, rad, 0, Math.PI * 2);
+          ctx.fillStyle = g;
+          ctx.fill();
+        });
+
+        requestAnimationFrame(tick);
+      }
+
+      document.addEventListener('mousemove', e => {
+        mouseX = e.clientX / window.innerWidth;
+        mouseY = e.clientY / window.innerHeight;
+      });
+
+      let _rt;
+      window.addEventListener('resize', () => {
+        clearTimeout(_rt);
+        _rt = setTimeout(resize, 150);
+      }, { passive: true });
+
+      resize();
+      requestAnimationFrame(tick);
+    })();
+
+    /* ── RESERVE FIRE CANVAS ── */
+    (function initReserveFire() {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const canvas = document.getElementById('reserve-fire-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const section = document.getElementById('reserve');
+
+      let W = 0, H = 0;
+      let mouseX = 0.5, mouseY = 0.5;
+      let smX = 0.5, smY = 0.5;
+
+      // Brass/copper dominant — fire source below frame, warmth rising toward text
+      const orbs = [
+        { nx: 0.50, ny: 1.02, size: 0.55, r: 201, g: 146, b: 43,  alpha: 0.30, depth: 0.028, spd: 0.40, ph: 0.0 },
+        { nx: 0.20, ny: 0.96, size: 0.38, r: 184, g: 115, b: 51,  alpha: 0.22, depth: 0.042, spd: 0.33, ph: 1.6 },
+        { nx: 0.80, ny: 0.96, size: 0.36, r: 184, g: 115, b: 51,  alpha: 0.20, depth: 0.036, spd: 0.50, ph: 2.9 },
+        { nx: 0.50, ny: 0.62, size: 0.26, r: 201, g: 146, b: 43,  alpha: 0.11, depth: 0.052, spd: 0.56, ph: 0.8 },
+        { nx: 0.12, ny: 0.52, size: 0.18, r: 107, g: 30,  b: 37,  alpha: 0.20, depth: 0.022, spd: 0.29, ph: 3.3 },
+        { nx: 0.88, ny: 0.58, size: 0.16, r: 107, g: 30,  b: 37,  alpha: 0.17, depth: 0.018, spd: 0.63, ph: 4.2 },
+      ];
+
+      function resize() {
+        W = canvas.width  = section.offsetWidth;
+        H = canvas.height = section.offsetHeight;
+      }
+
+      function tick(ts) {
+        const t = ts * 0.001;
+        smX += (mouseX - smX) * 0.035;
+        smY += (mouseY - smY) * 0.035;
+
+        ctx.clearRect(0, 0, W, H);
+
+        orbs.forEach(o => {
+          const dx = Math.sin(t * o.spd       + o.ph)       * 55;
+          const dy = Math.cos(t * o.spd * 0.7 + o.ph + 1.1) * 36;
+          const px = (smX - 0.5) * o.depth * W;
+          const py = (smY - 0.5) * o.depth * H;
+
+          const cx  = o.nx * W + dx + px;
+          const cy  = o.ny * H + dy + py;
+          const rad = o.size * Math.min(W, H);
+
+          const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, rad);
+          g.addColorStop(0,    `rgba(${o.r},${o.g},${o.b},${o.alpha})`);
+          g.addColorStop(0.45, `rgba(${o.r},${o.g},${o.b},${o.alpha * 0.5})`);
+          g.addColorStop(1,    `rgba(${o.r},${o.g},${o.b},0)`);
+
+          ctx.beginPath();
+          ctx.arc(cx, cy, rad, 0, Math.PI * 2);
+          ctx.fillStyle = g;
+          ctx.fill();
+        });
+
+        requestAnimationFrame(tick);
+      }
+
+      document.addEventListener('mousemove', e => {
+        mouseX = e.clientX / window.innerWidth;
+        mouseY = e.clientY / window.innerHeight;
+      });
+
+      let _rt;
+      window.addEventListener('resize', () => {
+        clearTimeout(_rt);
+        _rt = setTimeout(resize, 150);
+      }, { passive: true });
+
+      resize();
+      requestAnimationFrame(tick);
+    })();
+  </script>
+
+</body>
+</html>
